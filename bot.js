@@ -25,9 +25,10 @@ client.on('error', console.error)
 
 const prefix = "!spin"
 const helpMessage = "Type \"!spin\" to call the bot, then react to the message to participate, then type \"!spin\" again to start playing," 
- 					+ " and type \"!spin\" everytime you're done with the question and want to spin again."
+ 					+ " and type \"!spin\" everytime you're done with the question and want to spin again.\n"
  					+ "\nWhen you're done with the game, type \"!spin stop\". \n"
  					+ "To list all the players participating, type \"!spin list\".\n"
+ 					+ "If you want to add yourself to the game after it started, type \"!spin join\"\n"
  					+ "To see this message again type \"!spin help\"."
 
 let users = []
@@ -60,9 +61,12 @@ function spin(users) {
 
 
 client.on('message', message => {
+	if (message.content === "!spin help"){
+		message.channel.send(helpMessage)
+		return
+	}
 	if(waiting)
 		return
-
 	if (message.content === prefix){
 
 		if (!playing){
@@ -125,7 +129,7 @@ client.on('message', message => {
 				message.channel.send(users.join(" "))
 				break
 
-			case "add":
+			case "join":
 				if(users.includes(message.author)){
 					message.channel.send(`${message.author} is already participating.`)	
 				}else{
